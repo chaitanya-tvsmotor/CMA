@@ -1,0 +1,6 @@
+@CMA.API_HostAddress = http://localhost:5076
+
+GET {{CMA.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,13 @@
+/home/runner/work/CMA/CMA/src/CMA.Domain/bin/Debug/net10.0/CMA.Domain.deps.json
+/home/runner/work/CMA/CMA/src/CMA.Domain/bin/Debug/net10.0/CMA.Domain.dll
+/home/runner/work/CMA/CMA/src/CMA.Domain/bin/Debug/net10.0/CMA.Domain.pdb
+/home/runner/work/CMA/CMA/src/CMA.Domain/obj/Debug/net10.0/CMA.Domain.csproj.AssemblyReference.cache
+/home/runner/work/CMA/CMA/src/CMA.Domain/obj/Debug/net10.0/CMA.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/home/runner/work/CMA/CMA/src/CMA.Domain/obj/Debug/net10.0/CMA.Domain.AssemblyInfoInputs.cache
+/home/runner/work/CMA/CMA/src/CMA.Domain/obj/Debug/net10.0/CMA.Domain.AssemblyInfo.cs
+/home/runner/work/CMA/CMA/src/CMA.Domain/obj/Debug/net10.0/CMA.Domain.csproj.CoreCompileInputs.cache
+/home/runner/work/CMA/CMA/src/CMA.Domain/obj/Debug/net10.0/CMA.Domain.sourcelink.json
+/home/runner/work/CMA/CMA/src/CMA.Domain/obj/Debug/net10.0/CMA.Domain.dll
+/home/runner/work/CMA/CMA/src/CMA.Domain/obj/Debug/net10.0/refint/CMA.Domain.dll
+/home/runner/work/CMA/CMA/src/CMA.Domain/obj/Debug/net10.0/CMA.Domain.pdb
+/home/runner/work/CMA/CMA/src/CMA.Domain/obj/Debug/net10.0/ref/CMA.Domain.dll
