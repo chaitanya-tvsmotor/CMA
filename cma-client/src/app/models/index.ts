@@ -5,8 +5,17 @@ export interface Product {
   imageUrl?: string;
   price?: number;
   stockQuantity: number;
-  category: string;
+  categoryId: number;
+  categoryName?: string;
+  brandId: number;
+  brandName?: string;
   specifications?: string;
+  sku?: string;
+  barcode?: string;
+  length?: number;
+  width?: number;
+  height?: number;
+  weight?: number;
 }
 
 export interface Order {
@@ -75,4 +84,25 @@ export interface RegisterRequest {
   role: string;
   dealershipName?: string;
   licenseNumber?: string;
+}
+
+export interface CreateProductDto {
+  name: string;
+  description: string;
+  imageUrl?: string;
+  price: number;
+  stockQuantity: number;
+  categoryId: number;
+  brandId: number;
+  specifications?: string;
+  sku?: string;
+  barcode?: string;
+  length?: number;
+  width?: number;
+  height?: number;
+  weight?: number;
+}
+
+export interface UpdateProductDto extends CreateProductDto {
+  id: number;
 }
