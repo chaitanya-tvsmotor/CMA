@@ -1,1 +1,83 @@
-<p>dashboard works!</p>
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1>Dealer Dashboard</h1>
+    <p>Welcome, {{ (authService.currentUser$ | async)?.userName }}</p>
+  </div>
+
+  <div class="stats-cards">
+    <div class="stat-card">
+      <div class="stat-icon">📦</div>
+      <div class="stat-info">
+        <div class="stat-value">{{ stats.totalOrders }}</div>
+        <div class="stat-label">Total Orders</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">⏳</div>
+      <div class="stat-info">
+        <div class="stat-value">{{ stats.pendingOrders }}</div>
+        <div class="stat-label">Pending Orders</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">✅</div>
+      <div class="stat-info">
+        <div class="stat-value">{{ stats.completedOrders }}</div>
+        <div class="stat-label">Completed Orders</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">💰</div>
+      <div class="stat-info">
+        <div class="stat-value">${{ stats.totalAmount | number:'1.2-2' }}</div>
+        <div class="stat-label">Total Amount</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <a routerLink="/dealer/create-order" class="btn btn-primary">Create New Order</a>
+    <a routerLink="/products" class="btn btn-secondary">Browse Products</a>
+  </div>
+
+  <div class="orders-section">
+    <h2>Recent Orders</h2>
+    
+    @if (loading) {
+      <p>Loading orders...</p>
+    }
+
+    @if (!loading && orders.length > 0) {
+      <div class="orders-table-wrapper">
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>Order #</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Items</th>
+              <th>Total Amount</th>
+              <th>Sales Agent</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (order of orders; track order.id) {
+              <tr>
+                <td>{{ order.orderNumber }}</td>
+                <td>{{ order.orderDate | date:'short' }}</td>
+                <td><span [class]="'status-badge ' + getStatusClass(order.status)">{{ order.status }}</span></td>
+                <td>{{ order.items.length }}</td>
+                <td>${{ order.totalAmount | number:'1.2-2' }}</td>
+                <td>{{ order.salesAgentName || 'Not assigned' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+    @if (!loading && orders.length === 0) {
+      <p class="no-data">No orders yet. Create your first order!</p>
+    }
+  </div>
+</div>

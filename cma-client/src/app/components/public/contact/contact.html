@@ -1,1 +1,62 @@
-<p>contact works!</p>
+<div class="contact-container">
+  <div class="contact-header">
+    <h1>Contact Us</h1>
+    <p>Get in touch with our team</p>
+  </div>
+
+  <div class="contact-content">
+    <div class="contact-info">
+      <h2>Contact Information</h2>
+      <div class="info-item">
+        <strong>Address:</strong>
+        <p>123 Business Street, Suite 100<br>City, State 12345</p>
+      </div>
+      <div class="info-item">
+        <strong>Phone:</strong>
+        <p>+1 (555) 123-4567</p>
+      </div>
+      <div class="info-item">
+        <strong>Email:</strong>
+        <p>info@cma-agency.com</p>
+      </div>
+      <div class="info-item">
+        <strong>Business Hours:</strong>
+        <p>Monday - Friday: 9:00 AM - 6:00 PM<br>Saturday: 10:00 AM - 4:00 PM<br>Sunday: Closed</p>
+      </div>
+    </div>
+
+    <div class="contact-form-wrapper">
+      <h2>Send Us a Message</h2>
+      
+      @if (submitted) {
+        <div class="success-message">
+          Thank you for contacting us! We'll get back to you soon.
+        </div>
+      }
+
+      <form (ngSubmit)="onSubmit()" #contactFormRef="ngForm">
+        <div class="form-group">
+          <label for="name">Name *</label>
+          <input type="text" id="name" name="name" [(ngModel)]="contactForm.name" required class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email *</label>
+          <input type="email" id="email" name="email" [(ngModel)]="contactForm.email" required class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label for="subject">Subject *</label>
+          <input type="text" id="subject" name="subject" [(ngModel)]="contactForm.subject" required class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label for="message">Message *</label>
+          <textarea id="message" name="message" [(ngModel)]="contactForm.message" required rows="5" class="form-control"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary" [disabled]="!contactFormRef.valid">Send Message</button>
+      </form>
+    </div>
+  </div>
+</div>
