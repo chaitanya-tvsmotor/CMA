@@ -17,13 +17,19 @@ public class ProductService : IProductService
 
     public async Task<IEnumerable<ProductDto>> GetAllAsync(bool includePrice)
     {
-        var products = await _context.Products.ToListAsync();
+        var products = await _context.Products
+            .Include(p => p.Category)
+            .Include(p => p.Brand)
+            .ToListAsync();
         return products.Select(p => MapToDto(p, includePrice));
     }
 
     public async Task<ProductDto?> GetByIdAsync(int id, bool includePrice)
     {
-        var product = await _context.Products.FindAsync(id);
+        var product = await _context.Products
+            .Include(p => p.Category)
+            .Include(p => p.Brand)
+            .FirstOrDefaultAsync(p => p.Id == id);
         return product == null ? null : MapToDto(product, includePrice);
     }
 
@@ -36,15 +42,22 @@ public class ProductService : IProductService
             ImageUrl = dto.ImageUrl,
             Price = dto.Price,
             StockQuantity = dto.StockQuantity,
-            Category = dto.Category,
+            CategoryId = dto.CategoryId,
+            BrandId = dto.BrandId,
             Specifications = dto.Specifications,
+            SKU = dto.SKU,
+            Barcode = dto.Barcode,
+            Length = dto.Length,
+            Width = dto.Width,
+            Height = dto.Height,
+            Weight = dto.Weight,
             CreatedAt = DateTime.UtcNow
         };
 
         _context.Products.Add(product);
         await _context.SaveChangesAsync();
 
-        return MapToDto(product, true);
+        return (await GetByIdAsync(product.Id, true))!;
     }
 
     public async Task<ProductDto?> UpdateAsync(UpdateProductDto dto)
@@ -57,12 +70,19 @@ public class ProductService : IProductService
         product.ImageUrl = dto.ImageUrl;
         product.Price = dto.Price;
         product.StockQuantity = dto.StockQuantity;
-        product.Category = dto.Category;
+        product.CategoryId = dto.CategoryId;
+        product.BrandId = dto.BrandId;
         product.Specifications = dto.Specifications;
+        product.SKU = dto.SKU;
+        product.Barcode = dto.Barcode;
+        product.Length = dto.Length;
+        product.Width = dto.Width;
+        product.Height = dto.Height;
+        product.Weight = dto.Weight;
         product.UpdatedAt = DateTime.UtcNow;
 
         await _context.SaveChangesAsync();
-        return MapToDto(product, true);
+        return await GetByIdAsync(product.Id, true);
     }
 
     public async Task<bool> DeleteAsync(int id)
@@ -86,8 +106,17 @@ public class ProductService : IProductService
             ImageUrl = product.ImageUrl,
             Price = includePrice ? product.Price : null,
             StockQuantity = product.StockQuantity,
-            Category = product.Category,
-            Specifications = product.Specifications
+            CategoryId = product.CategoryId,
+            CategoryName = product.Category?.Name,
+            BrandId = product.BrandId,
+            BrandName = product.Brand?.Name,
+            Specifications = product.Specifications,
+            SKU = product.SKU,
+            Barcode = product.Barcode,
+            Length = product.Length,
+            Width = product.Width,
+            Height = product.Height,
+            Weight = product.Weight
         };
     }
 }

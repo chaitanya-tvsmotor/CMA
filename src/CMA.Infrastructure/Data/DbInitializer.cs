@@ -8,7 +8,7 @@ public static class DbInitializer
     public static async Task SeedAsync(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
     {
         // Seed Roles
-        string[] roles = { "Supervisor", "SalesAgent", "Dealer", "Manager" };
+        string[] roles = { "Supervisor", "SalesAgent", "Dealer", "Manager", "Driver", "Accountant", "Worker" };
         
         foreach (var role in roles)
         {
@@ -52,68 +52,98 @@ public static class DbInitializer
             await userManager.AddToRoleAsync(manager, "Manager");
         }
 
+        // Seed Categories
+        if (!context.Categories.Any())
+        {
+            var categories = new List<Category>
+            {
+                new Category { Name = "Motorcycles", Description = "All types of motorcycles", IsActive = true, CreatedAt = DateTime.UtcNow },
+                new Category { Name = "Accessories", Description = "Motorcycle accessories and gear", IsActive = true, CreatedAt = DateTime.UtcNow },
+                new Category { Name = "Parts", Description = "Spare parts and components", IsActive = true, CreatedAt = DateTime.UtcNow },
+                new Category { Name = "Safety Equipment", Description = "Safety gear and equipment", IsActive = true, CreatedAt = DateTime.UtcNow }
+            };
+            context.Categories.AddRange(categories);
+            await context.SaveChangesAsync();
+        }
+
+        // Seed Brands
+        if (!context.Brands.Any())
+        {
+            var brands = new List<Brand>
+            {
+                new Brand { Name = "Honda", Description = "Honda Motor Company", Country = "Japan", IsActive = true, CreatedAt = DateTime.UtcNow },
+                new Brand { Name = "Yamaha", Description = "Yamaha Motor Company", Country = "Japan", IsActive = true, CreatedAt = DateTime.UtcNow },
+                new Brand { Name = "TVS", Description = "TVS Motor Company", Country = "India", IsActive = true, CreatedAt = DateTime.UtcNow },
+                new Brand { Name = "Hero", Description = "Hero MotoCorp", Country = "India", IsActive = true, CreatedAt = DateTime.UtcNow }
+            };
+            context.Brands.AddRange(brands);
+            await context.SaveChangesAsync();
+        }
+
         // Seed Products
         if (!context.Products.Any())
         {
+            var motorcycleCategory = context.Categories.First(c => c.Name == "Motorcycles");
+            var accessoryCategory = context.Categories.First(c => c.Name == "Accessories");
+            var hondaBrand = context.Brands.First(b => b.Name == "Honda");
+            var yamahaBrand = context.Brands.First(b => b.Name == "Yamaha");
+            
             var products = new List<Product>
             {
                 new Product
                 {
-                    Name = "Premium Motorcycle",
-                    Description = "High-performance motorcycle with advanced features",
-                    Category = "Motorcycles",
+                    Name = "Honda CB500X",
+                    Description = "Adventure motorcycle with advanced features",
+                    CategoryId = motorcycleCategory.Id,
+                    BrandId = hondaBrand.Id,
                     Price = 15000.00m,
-                    StockQuantity = 50,
-                    ImageUrl = "/images/motorcycle1.jpg",
+                    StockQuantity = 25,
+                    ImageUrl = "/images/honda-cb500x.jpg",
                     Specifications = "Engine: 500cc, Power: 47HP, Top Speed: 180km/h",
+                    Length = 215,
+                    Width = 83,
+                    Height = 140,
+                    Weight = 196,
+                    SKU = "HON-CB500X-2024",
                     CreatedAt = DateTime.UtcNow
                 },
                 new Product
                 {
-                    Name = "Sport Bike",
+                    Name = "Yamaha MT-07",
                     Description = "Lightweight sport bike for urban riding",
-                    Category = "Motorcycles",
+                    CategoryId = motorcycleCategory.Id,
+                    BrandId = yamahaBrand.Id,
                     Price = 12000.00m,
-                    StockQuantity = 75,
-                    ImageUrl = "/images/sportbike.jpg",
-                    Specifications = "Engine: 400cc, Power: 40HP, Top Speed: 160km/h",
-                    CreatedAt = DateTime.UtcNow
-                },
-                new Product
-                {
-                    Name = "Cruiser Motorcycle",
-                    Description = "Comfortable cruiser for long-distance rides",
-                    Category = "Motorcycles",
-                    Price = 18000.00m,
                     StockQuantity = 30,
-                    ImageUrl = "/images/cruiser.jpg",
-                    Specifications = "Engine: 650cc, Power: 55HP, Top Speed: 170km/h",
+                    ImageUrl = "/images/yamaha-mt07.jpg",
+                    Specifications = "Engine: 689cc, Power: 73HP, Top Speed: 210km/h",
+                    Length = 208,
+                    Width = 80,
+                    Height = 110,
+                    Weight = 184,
+                    SKU = "YAM-MT07-2024",
                     CreatedAt = DateTime.UtcNow
                 },
                 new Product
                 {
-                    Name = "Motorcycle Helmet",
+                    Name = "Premium Helmet",
                     Description = "Safety helmet with advanced protection",
-                    Category = "Accessories",
+                    CategoryId = accessoryCategory.Id,
+                    BrandId = hondaBrand.Id,
                     Price = 150.00m,
-                    StockQuantity = 200,
+                    StockQuantity = 100,
                     ImageUrl = "/images/helmet.jpg",
                     Specifications = "DOT certified, Multiple sizes available",
-                    CreatedAt = DateTime.UtcNow
-                },
-                new Product
-                {
-                    Name = "Riding Jacket",
-                    Description = "Protective riding jacket with armor",
-                    Category = "Accessories",
-                    Price = 250.00m,
-                    StockQuantity = 150,
-                    ImageUrl = "/images/jacket.jpg",
-                    Specifications = "Waterproof, CE certified armor",
+                    Length = 30,
+                    Width = 25,
+                    Height = 25,
+                    Weight = 1.5m,
+                    SKU = "ACC-HELM-PRE-001",
                     CreatedAt = DateTime.UtcNow
                 }
             };
             context.Products.AddRange(products);
+            await context.SaveChangesAsync();
         }
 
         // Seed Suppliers
@@ -149,8 +179,7 @@ public static class DbInitializer
                 }
             };
             context.Suppliers.AddRange(suppliers);
+            await context.SaveChangesAsync();
         }
-
-        await context.SaveChangesAsync();
     }
 }
