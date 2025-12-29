@@ -1,0 +1,111 @@
+<div class="products-management-container">
+  <div class="page-header">
+    <h1>Products Management</h1>
+    <button (click)="openCreateModal()" class="btn btn-primary">Add New Product</button>
+  </div>
+
+  @if (loading) {
+    <p>Loading products...</p>
+  }
+
+  @if (!loading && products.length > 0) {
+    <div class="products-table-wrapper">
+      <table class="products-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Brand</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (product of products; track product.id) {
+            <tr>
+              <td>{{ product.id }}</td>
+              <td>{{ product.name }}</td>
+              <td>{{ product.brandName }}</td>
+              <td>{{ product.categoryName }}</td>
+              <td>${{ product.price | number:'1.2-2' }}</td>
+              <td>{{ product.stockQuantity }}</td>
+              <td>
+                <button (click)="openEditModal(product)" class="btn btn-sm btn-secondary">Edit</button>
+                <button (click)="deleteProduct(product.id)" class="btn btn-sm btn-danger">Delete</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  @if (!loading && products.length === 0) {
+    <p class="no-data">No products found. Create your first product!</p>
+  }
+</div>
+
+<!-- Modal -->
+@if (showModal) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>{{ editMode ? 'Edit Product' : 'Create New Product' }}</h2>
+        <button (click)="closeModal()" class="btn-close">×</button>
+      </div>
+      
+      <form (ngSubmit)="saveProduct()" #productForm="ngForm">
+        <div class="form-group">
+          <label>Name *</label>
+          <input type="text" [(ngModel)]="currentProduct.name" name="name" required class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label>Description *</label>
+          <textarea [(ngModel)]="currentProduct.description" name="description" required rows="3" class="form-control"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Price *</label>
+            <input type="number" [(ngModel)]="currentProduct.price" name="price" required min="0" step="0.01" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Stock Quantity *</label>
+            <input type="number" [(ngModel)]="currentProduct.stockQuantity" name="stockQuantity" required min="0" class="form-control">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Category ID *</label>
+            <input type="number" [(ngModel)]="currentProduct.categoryId" name="categoryId" required class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Brand ID *</label>
+            <input type="number" [(ngModel)]="currentProduct.brandId" name="brandId" required class="form-control">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>SKU</label>
+          <input type="text" [(ngModel)]="currentProduct.sku" name="sku" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label>Image URL</label>
+          <input type="text" [(ngModel)]="currentProduct.imageUrl" name="imageUrl" class="form-control">
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" (click)="closeModal()" class="btn btn-secondary">Cancel</button>
+          <button type="submit" [disabled]="!productForm.valid" class="btn btn-primary">
+            {{ editMode ? 'Update' : 'Create' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

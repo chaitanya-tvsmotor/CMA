@@ -1,0 +1,108 @@
+<div class="create-order-container">
+  <div class="page-header">
+    <h1>Create New Order</h1>
+    <p>Select products and quantities for your order</p>
+  </div>
+
+  @if (error) {
+    <div class="error-message">
+      {{ error }}
+    </div>
+  }
+
+  <div class="order-content">
+    <div class="products-section">
+      <h2>Available Products</h2>
+      
+      @if (loading) {
+        <p>Loading products...</p>
+      }
+
+      @if (!loading && products.length > 0) {
+        <div class="products-list">
+          @for (product of products; track product.id) {
+            <div class="product-item">
+              <div class="product-info">
+                <h3>{{ product.name }}</h3>
+                <p class="product-brand">{{ product.brandName }}</p>
+                <p class="product-price">${{ product.price | number:'1.2-2' }}</p>
+                <p class="stock-info">Stock: {{ product.stockQuantity }}</p>
+              </div>
+              <div class="product-actions">
+                <input 
+                  type="number" 
+                  min="1" 
+                  [max]="product.stockQuantity"
+                  placeholder="Qty"
+                  #quantityInput
+                  class="qty-input"
+                >
+                <button 
+                  (click)="addToOrder(product, +quantityInput.value)" 
+                  class="btn btn-sm btn-primary"
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      @if (!loading && products.length === 0) {
+        <p>No products available for order.</p>
+      }
+    </div>
+
+    <div class="order-summary">
+      <h2>Order Summary</h2>
+      
+      @if (selectedItems.size > 0) {
+        <div class="selected-items">
+          @for (item of selectedItems | keyvalue; track item.key) {
+            <div class="order-item">
+              <div class="item-details">
+                <strong>{{ item.value.product.name }}</strong>
+                <p>Qty: {{ item.value.quantity }} × ${{ item.value.product.price | number:'1.2-2' }}</p>
+                <p class="item-total">${{ (item.value.product.price || 0) * item.value.quantity | number:'1.2-2' }}</p>
+              </div>
+              <button (click)="removeFromOrder(item.key)" class="btn-remove">✕</button>
+            </div>
+          }
+        </div>
+
+        <div class="order-notes">
+          <label for="notes">Notes (Optional)</label>
+          <textarea 
+            id="notes" 
+            [(ngModel)]="notes" 
+            rows="3" 
+            class="form-control"
+            placeholder="Add any special instructions..."
+          ></textarea>
+        </div>
+
+        <div class="order-total">
+          <strong>Total Amount:</strong>
+          <span class="total-value">${{ totalAmount | number:'1.2-2' }}</span>
+        </div>
+
+        <button 
+          (click)="submitOrder()" 
+          [disabled]="submitting" 
+          class="btn btn-primary btn-block"
+        >
+          @if (submitting) {
+            <span>Submitting Order...</span>
+          } @else {
+            <span>Submit Order</span>
+          }
+        </button>
+      }
+
+      @if (selectedItems.size === 0) {
+        <p class="empty-message">No items selected. Add products to your order.</p>
+      }
+    </div>
+  </div>
+</div>

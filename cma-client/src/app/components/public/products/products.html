@@ -1,0 +1,56 @@
+<div class="products-container">
+  <div class="products-header">
+    <h1>Our Products</h1>
+    <p>Explore our wide range of motorcycles and accessories</p>
+  </div>
+
+  @if (loading) {
+    <div class="loading">
+      <p>Loading products...</p>
+    </div>
+  }
+
+  @if (error) {
+    <div class="error">
+      <p>{{ error }}</p>
+      <button (click)="loadProducts()" class="btn btn-primary">Retry</button>
+    </div>
+  }
+
+  @if (!loading && !error && products.length > 0) {
+    <div class="products-grid">
+      @for (product of products; track product.id) {
+        <div class="product-card">
+          @if (product.imageUrl) {
+            <img [src]="product.imageUrl" [alt]="product.name" class="product-image">
+          } @else {
+            <div class="product-image-placeholder">No Image</div>
+          }
+          <div class="product-details">
+            <h3>{{ product.name }}</h3>
+            <p class="product-category">{{ product.categoryName || 'Uncategorized' }}</p>
+            <p class="product-brand">{{ product.brandName || 'Unknown Brand' }}</p>
+            <p class="product-description">{{ product.description }}</p>
+            @if (product.price) {
+              <p class="product-price">${{ product.price | number:'1.2-2' }}</p>
+            }
+            @if (!product.price) {
+              <p class="product-price-hidden">Price available for registered dealers</p>
+            }
+            @if (product.stockQuantity > 0) {
+              <p class="stock-status in-stock">In Stock</p>
+            } @else {
+              <p class="stock-status out-of-stock">Out of Stock</p>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  @if (!loading && !error && products.length === 0) {
+    <div class="no-products">
+      <p>No products available at the moment.</p>
+    </div>
+  }
+</div>

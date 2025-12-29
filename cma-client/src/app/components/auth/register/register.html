@@ -1,0 +1,106 @@
+<div class="auth-container">
+  <div class="auth-card wide">
+    <h2>Register</h2>
+    <p class="auth-subtitle">Create your CMA account</p>
+
+    @if (error) {
+      <div class="error-message">
+        {{ error }}
+      </div>
+    }
+
+    <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="firstName">First Name *</label>
+          <input type="text" id="firstName" name="firstName" [(ngModel)]="registerData.firstName" required class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="lastName">Last Name *</label>
+          <input type="text" id="lastName" name="lastName" [(ngModel)]="registerData.lastName" required class="form-control">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="userName">Username *</label>
+          <input type="text" id="userName" name="userName" [(ngModel)]="registerData.userName" required class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="email">Email *</label>
+          <input type="email" id="email" name="email" [(ngModel)]="registerData.email" required class="form-control">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="password">Password *</label>
+          <input type="password" id="password" name="password" [(ngModel)]="registerData.password" required class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password *</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" [(ngModel)]="confirmPassword" required class="form-control">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="phoneNumber">Phone Number</label>
+        <input type="tel" id="phoneNumber" name="phoneNumber" [(ngModel)]="registerData.phoneNumber" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label for="role">Register As *</label>
+        <select id="role" name="role" [(ngModel)]="registerData.role" required class="form-control">
+          @for (role of roles; track role) {
+            <option [value]="role">{{ role }}</option>
+          }
+        </select>
+      </div>
+
+      @if (registerData.role === 'Dealer') {
+        <div class="form-row">
+          <div class="form-group">
+            <label for="dealershipName">Dealership Name</label>
+            <input type="text" id="dealershipName" name="dealershipName" [(ngModel)]="registerData.dealershipName" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="licenseNumber">License Number</label>
+            <input type="text" id="licenseNumber" name="licenseNumber" [(ngModel)]="registerData.licenseNumber" class="form-control">
+          </div>
+        </div>
+      }
+
+      <div class="form-group">
+        <label for="address">Address</label>
+        <input type="text" id="address" name="address" [(ngModel)]="registerData.address" class="form-control">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="city">City</label>
+          <input type="text" id="city" name="city" [(ngModel)]="registerData.city" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="state">State</label>
+          <input type="text" id="state" name="state" [(ngModel)]="registerData.state" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="postalCode">Postal Code</label>
+          <input type="text" id="postalCode" name="postalCode" [(ngModel)]="registerData.postalCode" class="form-control">
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block" [disabled]="loading || !registerForm.valid">
+        @if (loading) {
+          <span>Registering...</span>
+        } @else {
+          <span>Register</span>
+        }
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <p>Already have an account? <a routerLink="/login">Sign in here</a></p>
+    </div>
+  </div>
+</div>
